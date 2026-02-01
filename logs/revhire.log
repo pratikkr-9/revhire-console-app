@@ -1,0 +1,54 @@
+2026-01-26 22:56:50,314 INFO dao.UserDAO [main] User registered successfully: abc@company.com
+2026-01-26 22:57:21,353 INFO dao.UserDAO [main] User logged in: abc@company.com
+2026-01-26 22:59:34,403 INFO dao.UserDAO [main] User registered successfully: pratikkr.9@gmail.com
+2026-01-26 23:00:06,276 INFO dao.UserDAO [main] User logged in: pratikkr.9@gmail.com
+2026-01-26 23:03:34,515 INFO dao.UserDAO [main] User logged in: abc@company.com
+2026-01-26 23:04:53,477 INFO dao.UserDAO [main] User logged in: pratikkr.9@gmail.com
+2026-01-28 21:29:27,547 INFO dao.UserDAO [main] User logged in: pratikkr.9@gmail.com
+2026-01-28 21:29:52,240 INFO dao.ApplicationDAO [main] Job applied | JobID=1, SeekerID=2
+2026-01-28 21:30:38,144 INFO dao.UserDAO [main] User logged in: abc@company.com
+2026-01-28 21:30:59,894 INFO dao.ApplicationDAO [main] Fetched applicants for JobID=1
+2026-01-28 21:31:32,381 INFO dao.ApplicationDAO [main] ApplicationID=1 status updated to Shortlisted
+2026-01-28 21:31:56,184 INFO dao.UserDAO [main] User logged in: pratikkr.9@gmail.com
+2026-01-28 21:39:37,240 INFO dao.UserDAO [main] User logged in: pratikkr.9@gmail.com
+2026-01-28 21:39:59,733 INFO dao.ApplicationDAO [main] Fetched applications for seekerId=2
+2026-01-28 21:40:57,534 INFO dao.ApplicationDAO [main] ApplicationID=1 (JobID=1) updated to Withdrawn
+2026-01-28 21:40:57,536 INFO dao.ApplicationDAO [main] Application withdrawn | AppID=1
+2026-01-28 21:41:09,415 INFO dao.ApplicationDAO [main] ApplicationID=2 (JobID=1) updated to Withdrawn
+2026-01-28 21:41:09,416 INFO dao.ApplicationDAO [main] Application withdrawn | AppID=2
+2026-01-28 21:41:29,620 INFO dao.ApplicationDAO [main] ApplicationID=3 (JobID=0) updated to Withdrawn
+2026-01-28 21:41:29,623 INFO dao.ApplicationDAO [main] Application withdrawn | AppID=3
+2026-01-28 21:42:54,784 INFO dao.UserDAO [main] User logged in: pratikkr.9@gmail.com
+2026-01-28 21:43:01,105 INFO dao.ApplicationDAO [main] Job applied | JobID=1, SeekerID=2
+2026-01-28 21:43:17,690 INFO dao.UserDAO [main] User logged in: abc@company.com
+2026-01-28 21:43:33,406 INFO dao.ApplicationDAO [main] Fetched applicants for JobID=1
+2026-01-28 21:44:32,630 INFO dao.ApplicationDAO [main] ApplicationID=3 (JobID=1) updated to Shortlisted
+2026-01-28 21:45:03,772 INFO dao.ApplicationDAO [main] ApplicationID=5 (JobID=0) updated to Shortlisted
+2026-01-28 21:45:42,504 INFO dao.UserDAO [main] User logged in: pratikkr.9@gmail.com
+2026-01-29 00:03:01,928 WARN dao.UserDAO [main] Invalid login attempt for email: pratikkr.9@gmail.com
+2026-01-29 00:03:21,180 INFO dao.UserDAO [main] User logged in successfully: pratikkr.9@gmail.com
+2026-01-29 00:03:33,454 INFO dao.ApplicationDAO [main] Fetched 3 applications for seekerId=2
+2026-01-29 00:05:28,188 INFO dao.NotificationDAO [main] Notification added for userId=2
+2026-01-29 00:05:28,189 INFO dao.ApplicationDAO [main] ApplicationID=3 (JobID=1) updated to Withdrawn
+2026-01-29 00:05:28,190 INFO dao.ApplicationDAO [main] Application withdrawn | AppID=3
+2026-01-31 13:54:57,839 INFO dao.UserDAO [main] User registered successfully: test1@company.com
+2026-01-31 13:55:18,137 WARN dao.UserDAO [main] Invalid login attempt for email: test1@company.com
+2026-01-31 13:55:31,906 INFO dao.UserDAO [main] User logged in successfully: test1@company.com
+2026-01-31 13:57:10,514 INFO dao.JobDAO [main] Job posted successfully for employerId=3
+2026-01-31 13:57:14,172 INFO dao.JobDAO [main] Fetched 2 jobs from database
+2026-01-31 13:57:50,697 INFO dao.ApplicationDAO [main] Fetched 3 applicants for JobID=1
+2026-01-31 14:11:51,128 INFO dao.UserDAO [main] User logged in successfully: test1@company.com
+2026-01-31 20:10:04,966 INFO dao.UserDAO [main] User registered successfully: Hr@company.com
+2026-01-31 20:10:25,830 INFO dao.UserDAO [main] User logged in successfully: Hr@company.com
+2026-01-31 20:11:42,132 INFO dao.JobDAO [main] Job posted successfully for employerId=4
+2026-01-31 20:12:16,666 INFO dao.UserDAO [main] User registered successfully: pratik@gmail.com
+2026-01-31 20:12:33,283 INFO dao.UserDAO [main] User logged in successfully: pratik@gmail.com
+2026-01-31 20:13:03,879 INFO dao.ApplicationDAO [main] Job applied | JobID=1, SeekerID=5
+2026-01-31 20:13:10,382 INFO dao.JobDAO [main] Fetched 3 jobs from database
+2026-01-31 20:13:24,817 INFO dao.ApplicationDAO [main] Job applied | JobID=3, SeekerID=5
+2026-01-31 20:14:25,359 INFO dao.ResumeDAO [main] Resume saved/updated for seekerId=5
+2026-01-31 20:14:35,314 INFO dao.ResumeDAO [main] Resume fetched for seekerId=5
+2026-01-31 20:15:12,406 INFO dao.UserDAO [main] User logged in successfully: Hr@company.com
+2026-01-31 20:15:22,545 INFO dao.ApplicationDAO [main] Fetched 1 applicants for JobID=3
+2026-01-31 20:15:46,043 INFO dao.NotificationDAO [main] Notification added for userId=2
+2026-01-31 20:15:46,044 INFO dao.ApplicationDAO [main] ApplicationID=3 (JobID=1) updated to Shortlisted
