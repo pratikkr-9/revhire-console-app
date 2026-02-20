@@ -4,6 +4,7 @@ package com.example.revhire.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.revhire.dto.ResumeRequest;
 import com.example.revhire.entity.Resume;
@@ -26,4 +27,13 @@ public class ResumeController {
     public Resume getResume(Authentication authentication) {
         return resumeService.getResume(authentication.getName());
     }
+    
+    @PostMapping("/upload")
+    public Resume uploadResume(
+            @RequestParam("file") MultipartFile file,
+            Authentication authentication) throws Exception {
+
+        return resumeService.uploadResumeFile(authentication.getName(), file);
+    }
+    
 }
