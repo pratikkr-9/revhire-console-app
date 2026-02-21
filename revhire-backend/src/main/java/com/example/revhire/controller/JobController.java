@@ -32,4 +32,33 @@ public class JobController {
     ) {
         return jobService.searchJobs(title, location, experience, minSalary, maxSalary);
     }
+    @GetMapping("/employer")
+    public List<Job> employerJobs(Authentication authentication) {
+        return jobService.getEmployerJobs(authentication.getName());
+    }
+
+    @PutMapping("/{id}")
+    public Job updateJob(@PathVariable Long id,
+                         @RequestBody Job job,
+                         Authentication authentication) {
+        return jobService.updateJob(authentication.getName(), id, job);
+    }
+
+    @PutMapping("/{id}/close")
+    public Job closeJob(@PathVariable Long id,
+                        Authentication authentication) {
+        return jobService.closeJob(authentication.getName(), id);
+    }
+
+    @PutMapping("/{id}/fill")
+    public Job markAsFilled(@PathVariable Long id,
+                            Authentication authentication) {
+        return jobService.markAsFilled(authentication.getName(), id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteJob(@PathVariable Long id,
+                          Authentication authentication) {
+        jobService.deleteJob(authentication.getName(), id);
+    }
 }

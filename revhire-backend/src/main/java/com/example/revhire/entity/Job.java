@@ -48,6 +48,7 @@ public class Job {
     private Integer openings;
 
     private Boolean isActive = true;
+    private Boolean isFilled = false;
 
     @ManyToOne
     @JoinColumn(name = "employer_id")
