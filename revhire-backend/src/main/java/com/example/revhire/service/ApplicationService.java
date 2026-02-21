@@ -22,6 +22,7 @@ public class ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final UserRepository userRepository;
     private final JobRepository jobRepository;
+    private final NotificationService notificationService;
 
     public Application applyForJob(String email, ApplyRequest request) {
 
@@ -107,7 +108,16 @@ throw new RuntimeException("Unauthorized action");
 application.setStatus(status);
 application.setEmployerNote(note);
 
-return applicationRepository.save(application);
+Application updated = applicationRepository.save(application);
+
+notificationService.createNotification(
+application.getApplicant(),
+"Your application for job '" +
+application.getJob().getTitle() +
+"' has been updated to: " + status
+);
+
+return updated;
 }
     
     public List<Application> bulkUpdateStatus(String email,
