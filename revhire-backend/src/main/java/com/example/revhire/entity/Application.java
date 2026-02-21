@@ -31,6 +31,8 @@ public class Application {
     private LocalDateTime appliedDate;
 
     private String withdrawReason;
+    @Column(length = 2000)
+    private String employerNote;
 
     @ManyToOne
     @JoinColumn(name = "job_id")

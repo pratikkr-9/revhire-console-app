@@ -75,4 +75,56 @@ public class ApplicationService {
 
         return applicationRepository.findByApplicant(user);
     }
+    public List<Application> getApplicantsForJob(String email,
+            Long jobId,
+            ApplicationStatus status) {
+
+Job job = jobRepository.findById(jobId)
+.orElseThrow(() -> new RuntimeException("Job not found"));
+
+if (!job.getEmployer().getEmail().equals(email)) {
+throw new RuntimeException("Unauthorized action");
+}
+
+if (status != null) {
+return applicationRepository.findByJobIdAndStatus(jobId, status);
+}
+
+return applicationRepository.findByJobId(jobId);
+}
+    public Application updateApplicationStatus(String email,
+            Long applicationId,
+            ApplicationStatus status,
+            String note) {
+
+Application application = applicationRepository.findById(applicationId)
+.orElseThrow(() -> new RuntimeException("Application not found"));
+
+if (!application.getJob().getEmployer().getEmail().equals(email)) {
+throw new RuntimeException("Unauthorized action");
+}
+
+application.setStatus(status);
+application.setEmployerNote(note);
+
+return applicationRepository.save(application);
+}
+    
+    public List<Application> bulkUpdateStatus(String email,
+            List<Long> applicationIds,
+            ApplicationStatus status) {
+
+List<Application> applications = applicationRepository.findAllById(applicationIds);
+
+for (Application application : applications) {
+
+if (!application.getJob().getEmployer().getEmail().equals(email)) {
+throw new RuntimeException("Unauthorized action");
+}
+
+application.setStatus(status);
+}
+
+return applicationRepository.saveAll(applications);
+}
 }
