@@ -2,50 +2,79 @@ package com.example.revhire.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import com.example.revhire.dto.CreateJobRequest;
 import com.example.revhire.entity.Job;
 import com.example.revhire.entity.User;
+import com.example.revhire.enums.Role;
 import com.example.revhire.repository.JobRepository;
 import com.example.revhire.repository.UserRepository;
 import com.example.revhire.specification.JobSpecification;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
 import java.util.List;
-
+import org.springframework.data.jpa.domain.Specification;
 @Service
 @RequiredArgsConstructor
 public class JobService {
 
     private final JobRepository jobRepository;
     private final UserRepository userRepository;
+    
 
-    public Job createJob(String email, Job job) {
+    public Job createJob(CreateJobRequest request, Authentication authentication) {
 
-        User employer = userRepository.findByEmail(email)
+        User employer = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("Employer not found"));
 
+        if (employer.getRole() != Role.EMPLOYER) {
+            throw new RuntimeException("Only employers can create jobs");
+        }
+
+        Job job = new Job();
+
+        job.setTitle(request.getTitle());
+        job.setDescription(request.getDescription());
+        job.setRequiredSkills(request.getRequiredSkills());
+        job.setExperienceYears(request.getExperienceYears());
+        job.setRequiredEducation(request.getRequiredEducation());
+        job.setLocation(request.getLocation());
+        job.setSalaryMin(request.getMinSalary());
+        job.setSalaryMax(request.getMaxSalary());
+        job.setJobType(request.getJobType());
+        job.setDeadline(request.getApplicationDeadline());
+        job.setNumberOfOpenings(request.getNumberOfOpenings());
+
         job.setEmployer(employer);
-        job.setPostedDate(LocalDateTime.now());
         job.setIsActive(true);
+        job.setIsFilled(false);
 
         return jobRepository.save(job);
     }
+    
+    public Page<Job> searchJobs(
+            String title,
+            String location,
+            Integer experienceYears,
+            Double minSalary,
+            Double maxSalary,
+            Pageable pageable
+    ) {
 
-    public List<Job> searchJobs(String title,
-                                 String location,
-                                 Integer experience,
-                                 Double minSalary,
-                                 Double maxSalary) {
+        Specification<Job> specification = JobSpecification.filterJobs(
+                title,
+                location,
+                experienceYears,
+                minSalary,
+                maxSalary
+        );
 
-        Specification<Job> spec = Specification
-                .where(JobSpecification.hasTitle(title))
-                .and(JobSpecification.hasLocation(location))
-                .and(JobSpecification.hasExperience(experience))
-                .and(JobSpecification.hasSalaryRange(minSalary, maxSalary));
-
-        return jobRepository.findAll(spec);
+        return jobRepository.findAll(specification, pageable);
     }
     
     public List<Job> getEmployerJobs(String email) {

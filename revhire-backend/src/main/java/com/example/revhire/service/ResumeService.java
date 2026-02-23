@@ -1,6 +1,5 @@
 package com.example.revhire.service;
 
-
 import lombok.RequiredArgsConstructor;
 
 import java.io.File;
@@ -11,12 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.revhire.dto.ResumeRequest;
+import com.example.revhire.dto.ResumeResponse;
 import com.example.revhire.entity.Resume;
 import com.example.revhire.entity.User;
 import com.example.revhire.repository.ResumeRepository;
 import com.example.revhire.repository.UserRepository;
-
-
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +23,7 @@ public class ResumeService {
     private final ResumeRepository resumeRepository;
     private final UserRepository userRepository;
 
-    public Resume saveResume(String email, ResumeRequest request) {
+    public ResumeResponse saveResume(String email, ResumeRequest request) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -41,27 +39,41 @@ public class ResumeService {
         resume.setCertifications(request.getCertifications());
         resume.setUser(user);
 
-        return resumeRepository.save(resume);
+        Resume saved = resumeRepository.save(resume);
+
+        return mapToResponse(saved);
     }
 
-    public Resume getResume(String email) {
+    public ResumeResponse getResume(String email) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        return resumeRepository.findByUser(user)
+        Resume resume = resumeRepository.findByUser(user)
                 .orElseThrow(() -> new RuntimeException("Resume not found"));
+
+        return mapToResponse(resume);
     }
-    
-    public Resume uploadResumeFile(String email, MultipartFile file) throws IOException {
+
+    public ResumeResponse uploadResumeFile(String email, MultipartFile file) throws IOException {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("Resume file is required");
+        }
+
+        long maxSize = 2 * 1024 * 1024; // 2MB
+        if (file.getSize() > maxSize) {
+            throw new RuntimeException("File size exceeds 2MB limit");
+        }
 
         String fileName = file.getOriginalFilename();
 
         if (fileName == null ||
-                (!fileName.endsWith(".pdf") && !fileName.endsWith(".docx"))) {
+                (!fileName.toLowerCase().endsWith(".pdf") &&
+                 !fileName.toLowerCase().endsWith(".docx"))) {
             throw new RuntimeException("Only PDF or DOCX files allowed");
         }
 
@@ -80,11 +92,27 @@ public class ResumeService {
         } catch (IOException e) {
             throw new RuntimeException("Failed to upload file", e);
         }
+
         Resume resume = resumeRepository.findByUser(user)
                 .orElseThrow(() -> new RuntimeException("Create resume first"));
 
         resume.setUploadedFilePath(destination.getAbsolutePath());
 
-        return resumeRepository.save(resume);
+        Resume saved = resumeRepository.save(resume);
+
+        return mapToResponse(saved);
     }
+
+    private ResumeResponse mapToResponse(Resume resume) {
+        return ResumeResponse.builder()
+                .id(resume.getId())
+                .objective(resume.getObjective())
+                .education(resume.getEducation())
+                .experience(resume.getExperience())
+                .skills(resume.getSkills())
+                .projects(resume.getProjects())
+                .certifications(resume.getCertifications())
+                .uploadedFilePath(resume.getUploadedFilePath())
+                .build();
     }
+}

@@ -1,9 +1,14 @@
 package com.example.revhire.controller;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.revhire.dto.CreateJobRequest;
 import com.example.revhire.entity.Job;
 import com.example.revhire.service.JobService;
 
@@ -17,20 +22,23 @@ public class JobController {
     private final JobService jobService;
 
     @PostMapping
-    public Job createJob(@RequestBody Job job,
-                         Authentication authentication) {
-        return jobService.createJob(authentication.getName(), job);
+    public ResponseEntity<?> createJob(@RequestBody CreateJobRequest request,
+                                       Authentication authentication) {
+        return ResponseEntity.ok(jobService.createJob(request, authentication));
     }
-
     @GetMapping("/search")
-    public List<Job> searchJobs(
+    public ResponseEntity<Page<Job>> searchJobs(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String location,
-            @RequestParam(required = false) Integer experience,
+            @RequestParam(required = false) Integer experienceYears,
             @RequestParam(required = false) Double minSalary,
-            @RequestParam(required = false) Double maxSalary
+            @RequestParam(required = false) Double maxSalary,
+            Pageable pageable
     ) {
-        return jobService.searchJobs(title, location, experience, minSalary, maxSalary);
+
+        return ResponseEntity.ok(
+                jobService.searchJobs(title, location, experienceYears, minSalary, maxSalary, pageable)
+        );
     }
     @GetMapping("/employer")
     public List<Job> employerJobs(Authentication authentication) {

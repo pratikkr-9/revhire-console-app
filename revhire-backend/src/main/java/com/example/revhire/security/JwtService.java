@@ -1,9 +1,10 @@
 package com.example.revhire.security;
 
-
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
+
+import com.example.revhire.entity.User;
 
 import java.security.Key;
 import java.util.Date;
@@ -14,9 +15,11 @@ public class JwtService {
     private final String SECRET = "revhireSecretKeyrevhireSecretKeyrevhireSecretKey";
     private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-    public String generateToken(String email) {
+    public String generateToken(User user) {
+
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(user.getEmail())
+                .claim("role", user.getRole().name())   // 🔥 ADD ROLE HERE
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
                 .signWith(key, SignatureAlgorithm.HS256)

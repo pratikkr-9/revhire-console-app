@@ -32,6 +32,7 @@ public class Application {
 
     private String withdrawReason;
     @Column(length = 2000)
+    
     private String employerNote;
 
     @ManyToOne

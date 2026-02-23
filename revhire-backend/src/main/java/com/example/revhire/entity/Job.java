@@ -46,6 +46,8 @@ public class Job {
     private LocalDateTime deadline;
 
     private Integer openings;
+    
+    
 
 
 
@@ -54,5 +56,14 @@ public class Job {
     private User employer;
     private Boolean isActive = true;
     private Boolean isFilled = false; 
+    
+    @Column(name = "required_skills", columnDefinition = "TEXT")
+    private String requiredSkills;
+
+    @Column(name = "required_education")
+    private String requiredEducation;
+
+    @Column(name = "number_of_openings")
+    private Integer numberOfOpenings;
     
 }

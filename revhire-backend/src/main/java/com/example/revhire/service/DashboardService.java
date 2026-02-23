@@ -1,11 +1,14 @@
 package com.example.revhire.service;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.example.revhire.dto.EmployerDashboardResponse;
 import com.example.revhire.entity.User;
 import com.example.revhire.enums.ApplicationStatus;
+import com.example.revhire.enums.Role;
 import com.example.revhire.repository.ApplicationRepository;
 import com.example.revhire.repository.JobRepository;
 import com.example.revhire.repository.UserRepository;
@@ -18,10 +21,14 @@ public class DashboardService {
     private final JobRepository jobRepository;
     private final ApplicationRepository applicationRepository;
 
-    public EmployerDashboardResponse getEmployerDashboard(String email) {
+    public EmployerDashboardResponse getEmployerDashboard(Authentication authentication) {
 
-        User employer = userRepository.findByEmail(email)
+        User employer = userRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("Employer not found"));
+
+        if (employer.getRole() != Role.EMPLOYER) {
+            throw new RuntimeException("Only employers can access dashboard");
+        }
 
         long totalJobs = jobRepository.countByEmployerId(employer.getId());
         long activeJobs = jobRepository.countByEmployerIdAndIsActiveTrue(employer.getId());
@@ -43,4 +50,7 @@ public class DashboardService {
                 .pendingReviews(pendingReviews)
                 .build();
     }
+    
+    
+    
 }

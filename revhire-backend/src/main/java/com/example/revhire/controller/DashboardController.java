@@ -1,6 +1,8 @@
 package com.example.revhire.controller;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,11 +16,15 @@ public class DashboardController {
 
     private final DashboardService dashboardService;
 
+
+    
+    
     @GetMapping("/employer")
-    public EmployerDashboardResponse employerDashboard(
+    public ResponseEntity<EmployerDashboardResponse> getEmployerDashboard(
             Authentication authentication) {
 
-        return dashboardService
-                .getEmployerDashboard(authentication.getName());
+        return ResponseEntity.ok(
+                dashboardService.getEmployerDashboard(authentication)
+        );
     }
 }

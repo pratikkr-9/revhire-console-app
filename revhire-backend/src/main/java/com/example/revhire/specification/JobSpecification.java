@@ -1,42 +1,73 @@
 package com.example.revhire.specification;
 
-
-
-import org.springframework.data.jpa.domain.Specification;
-
 import com.example.revhire.entity.Job;
+import org.springframework.data.jpa.domain.Specification;
 
 public class JobSpecification {
 
-    public static Specification<Job> hasTitle(String title) {
-        return (root, query, cb) ->
-                title == null ? null :
-                        cb.like(cb.lower(root.get("title")),
-                                "%" + title.toLowerCase() + "%");
-    }
+    public static Specification<Job> filterJobs(
+            String title,
+            String location,
+            Integer experienceYears,
+            Double minSalary,
+            Double maxSalary
+    ) {
 
-    public static Specification<Job> hasLocation(String location) {
-        return (root, query, cb) ->
-                location == null ? null :
-                        cb.like(cb.lower(root.get("location")),
-                                "%" + location.toLowerCase() + "%");
-    }
+        return (root, query, criteriaBuilder) -> {
 
-    public static Specification<Job> hasExperience(Integer exp) {
-        return (root, query, cb) ->
-                exp == null ? null :
-                        cb.lessThanOrEqualTo(root.get("experienceYears"), exp);
-    }
+            var predicates = criteriaBuilder.conjunction();
 
-    public static Specification<Job> hasSalaryRange(Double min, Double max) {
-        return (root, query, cb) -> {
-            if (min == null && max == null) return null;
-
-            if (min != null && max != null) {
-                return cb.between(root.get("salaryMin"), min, max);
+            if (title != null && !title.isEmpty()) {
+                predicates = criteriaBuilder.and(
+                        predicates,
+                        criteriaBuilder.like(
+                                criteriaBuilder.lower(root.get("title")),
+                                "%" + title.toLowerCase() + "%"
+                        )
+                );
             }
 
-            return null;
+            if (location != null && !location.isEmpty()) {
+                predicates = criteriaBuilder.and(
+                        predicates,
+                        criteriaBuilder.like(
+                                criteriaBuilder.lower(root.get("location")),
+                                "%" + location.toLowerCase() + "%"
+                        )
+                );
+            }
+
+            if (experienceYears != null) {
+                predicates = criteriaBuilder.and(
+                        predicates,
+                        criteriaBuilder.greaterThanOrEqualTo(
+                                root.get("experienceYears"),
+                                experienceYears
+                        )
+                );
+            }
+
+            if (minSalary != null) {
+                predicates = criteriaBuilder.and(
+                        predicates,
+                        criteriaBuilder.greaterThanOrEqualTo(
+                                root.get("minSalary"),
+                                minSalary
+                        )
+                );
+            }
+
+            if (maxSalary != null) {
+                predicates = criteriaBuilder.and(
+                        predicates,
+                        criteriaBuilder.lessThanOrEqualTo(
+                                root.get("maxSalary"),
+                                maxSalary
+                        )
+                );
+            }
+
+            return predicates;
         };
     }
 }

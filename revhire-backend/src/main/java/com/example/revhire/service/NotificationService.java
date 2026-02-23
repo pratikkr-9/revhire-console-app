@@ -20,12 +20,11 @@ public class NotificationService {
 
     public void createNotification(User user, String message) {
 
-        Notification notification = Notification.builder()
-                .user(user)
-                .message(message)
-                .isRead(false)
-                .createdAt(LocalDateTime.now())
-                .build();
+        Notification notification = new Notification();
+        notification.setUser(user);
+        notification.setMessage(message);
+        notification.setCreatedAt(LocalDateTime.now());
+        notification.setIsRead(false);
 
         notificationRepository.save(notification);
     }

@@ -14,4 +14,12 @@ public class RegisterRequest {
     private String location;
     private String employmentStatus;
     private Role role;
+    
+ // Employer specific fields (optional)
+    private String companyName;
+    private String industry;
+    private String companySize;
+    private String companyDescription;
+    private String companyWebsite;
+    private String companyLocation;
 }
